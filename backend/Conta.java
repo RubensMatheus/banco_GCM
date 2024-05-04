@@ -2,12 +2,10 @@ package backend;
 
 public class Conta {
     private String numeroConta;
-    private String nomeTitular;
     private double saldo;
 
-    public Conta(String numeroConta, String nomeTitular, double saldo) {
+    public Conta(String numeroConta, double saldo) {
         this.numeroConta = numeroConta;
-        this.nomeTitular = nomeTitular;
         this.saldo = saldo;
     }
 
@@ -17,14 +15,6 @@ public class Conta {
 
     public void setNumeroConta(String numeroConta) {
         this.numeroConta = numeroConta;
-    }
-
-    public String getNomeTitular() {
-        return nomeTitular;
-    }
-
-    public void setNomeTitular(String nomeTitular) {
-        this.nomeTitular = nomeTitular;
     }
 
     public double getSaldo() {
