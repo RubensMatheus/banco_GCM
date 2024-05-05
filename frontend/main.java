@@ -27,6 +27,11 @@ public class main {
         banco.debitar(123, 50);
         banco.consultarSaldo(123);
 
+        banco.cadastrarConta(321);
+        banco.transferencia(123, 321, 25);
+        banco.consultarSaldo(123);
+        banco.consultarSaldo(321);
+
     }
 
 }

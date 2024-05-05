@@ -49,4 +49,17 @@ public class Banco {
             System.out.println("Conta não encontrada.");
         }
     }
+
+    public void transferencia(int origem, int destino, double valor) {
+        Conta contaOrigem = contas.get(origem);
+        Conta contaDestino = contas.get(destino);
+
+        if (contaOrigem != null && contaDestino != null) {
+            contaOrigem.debitar(valor);
+            contaDestino.creditar(valor);
+            System.out.println("Transferência de " + valor + " da conta " + origem + " para a conta " + destino + " realizada com sucesso.");
+        } else {
+            System.out.println("Conta de origem ou destino não encontrada.");
+        }
+    }
 }
