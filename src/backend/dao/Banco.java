@@ -1,6 +1,6 @@
-package backend.dao;
+package src.backend.dao;
 
-import backend.model.Conta;
+import src.backend.model.Conta;
 
 import java.util.HashMap;
 import java.util.Map;
