@@ -24,6 +24,7 @@ public class main {
             opcao = scanner.nextInt();
 
             switch (opcao) {
+
                 case 1:
                     System.out.print("Digite o número da conta: ");
                     int numeroConta = scanner.nextInt();
@@ -58,11 +59,13 @@ public class main {
                     banco.transferencia(origem, destino, valorTransferencia);
                     break;
                 case 0:
-                    System.out.println("Encerrando...");
+                    System.out.println("Encerrando app ...");
                     break;
                 default:
                     System.out.println("Opção inválida. Tente novamente.");
+
             }
+
         } while (opcao != 0);
 
         scanner.close();
