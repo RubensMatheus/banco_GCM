@@ -43,8 +43,12 @@ public class Banco {
     public void debitar(int numero, double valor) {
         Conta conta = contas.get(numero);
         if (conta != null) {
-            conta.debitar(valor);
-            System.out.println("Débito de " + valor + " realizado com sucesso na conta " + numero);
+            if (conta.getSaldo() >= valor) {
+                conta.debitar(valor);
+                System.out.println("Débito de " + valor + " realizado com sucesso na conta " + numero);
+            }else {
+                System.out.println("Saldo insuficiente na conta de origem.");
+            }
         } else {
             System.out.println("Conta não encontrada.");
         }
@@ -55,9 +59,13 @@ public class Banco {
         Conta contaDestino = contas.get(destino);
 
         if (contaOrigem != null && contaDestino != null) {
-            contaOrigem.debitar(valor);
-            contaDestino.creditar(valor);
-            System.out.println("Transferência de " + valor + " da conta " + origem + " para a conta " + destino + " realizada com sucesso.");
+            if (contaOrigem.getSaldo() >= valor) {
+                contaOrigem.debitar(valor);
+                contaDestino.creditar(valor);
+                System.out.println("Transferência de " + valor + " da conta " + origem + " para a conta " + destino + " realizada com sucesso.");
+            }else {
+                System.out.println("Saldo insuficiente na conta de origem.");
+            }
         } else {
             System.out.println("Conta de origem ou destino não encontrada.");
         }
