@@ -26,9 +26,11 @@ public class main {
             switch (opcao) {
 
                 case 1:
+                    System.out.println("Digite, 1 para Conta Bônus e outro número qualquer para Conta normal: ");
+                    int tipoConta = scanner.nextInt();
                     System.out.print("Digite o número da conta: ");
                     int numeroConta = scanner.nextInt();
-                    banco.cadastrarConta(numeroConta);
+                    banco.cadastrarConta(numeroConta, tipoConta);
                     break;
                 case 2:
                     System.out.print("Digite o número da conta: ");

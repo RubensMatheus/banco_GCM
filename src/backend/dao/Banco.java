@@ -1,6 +1,7 @@
 package src.backend.dao;
 
 import src.backend.model.Conta;
+import src.backend.model.ContaBonus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,9 +13,13 @@ public class Banco {
         contas = new HashMap<>();
     }
 
-    public void cadastrarConta(int numero) {
+    public void cadastrarConta(int numero, int tipo) {
         if (!contas.containsKey(numero)) {
-            contas.put(numero, new Conta(numero));
+            if (tipo == 1 ) {
+                contas.put(numero, new ContaBonus(numero));
+            }else {
+                contas.put(numero, new Conta(numero));
+            }
             System.out.println("Conta criada com sucesso!");
         } else {
             System.out.println("Já existe uma conta com esse número.");
@@ -24,7 +29,11 @@ public class Banco {
     public void consultarSaldo(int numero) {
         Conta conta = contas.get(numero);
         if (conta != null) {
-            System.out.println("Saldo da conta " + numero + ": " + conta.getSaldo());
+            if (conta instanceof  ContaBonus) {
+                System.out.println("Saldo da conta " + numero + ": " + conta.getSaldo() + " - Pontuação atual: " + ((ContaBonus) conta).getPontuacao());
+            }else {
+                System.out.println("Saldo da conta " + numero + ": " + conta.getSaldo());
+            }
         } else {
             System.out.println("Conta não encontrada.");
         }
