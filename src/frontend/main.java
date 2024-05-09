@@ -19,6 +19,7 @@ public class main {
             System.out.println("3. Crédito");
             System.out.println("4. Débito");
             System.out.println("5. Transferência");
+            System.out.println("6. Render Juros");
             System.out.println("0. Sair");
             System.out.print("Escolha uma opção: ");
             opcao = scanner.nextInt();
@@ -26,7 +27,7 @@ public class main {
             switch (opcao) {
 
                 case 1:
-                    System.out.println("Digite, 1 para Conta Bônus e outro número qualquer para Conta normal: ");
+                    System.out.println("Digite, 1 para Conta Bônus, 2 para Conta Poupança e outro número qualquer para Conta normal: ");
                     int tipoConta = scanner.nextInt();
                     System.out.print("Digite o número da conta: ");
                     int numeroConta = scanner.nextInt();
@@ -59,6 +60,11 @@ public class main {
                     System.out.print("Digite o valor a ser transferido: ");
                     double valorTransferencia = scanner.nextDouble();
                     banco.transferencia(origem, destino, valorTransferencia);
+                    break;
+                case 6:
+                    System.out.print("Digite a taxa de juros a ser aplicada: ");
+                    double taxaJuros = scanner.nextDouble();
+                    banco.renderJuros(taxaJuros);
                     break;
                 case 0:
                     System.out.println("Encerrando app ...");

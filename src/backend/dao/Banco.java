@@ -2,6 +2,7 @@ package src.backend.dao;
 
 import src.backend.model.Conta;
 import src.backend.model.ContaBonus;
+import src.backend.model.ContaPoupanca;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +18,10 @@ public class Banco {
         if (!contas.containsKey(numero)) {
             if (tipo == 1 ) {
                 contas.put(numero, new ContaBonus(numero));
-            }else {
+            } else if (tipo == 2) {
+                contas.put(numero, new ContaPoupanca(numero));
+            }
+            else {
                 contas.put(numero, new Conta(numero));
             }
             System.out.println("Conta criada com sucesso!");
@@ -78,5 +82,15 @@ public class Banco {
         } else {
             System.out.println("Conta de origem ou destino não encontrada.");
         }
+    }
+
+    public void renderJuros(double taxaPercentual) {
+        for (Conta conta : contas.values()) {
+            if (conta instanceof ContaPoupanca) {
+                ContaPoupanca contaPoupanca = (ContaPoupanca) conta;
+                contaPoupanca.renderJuros(taxaPercentual);
+            }
+        }
+        System.out.println("Juros renderizados!");
     }
 }
