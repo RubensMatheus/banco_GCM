@@ -12,9 +12,9 @@ public class Banco {
         contas = new HashMap<>();
     }
 
-    public void cadastrarConta(int numero) {
+    public void cadastrarConta(int numero, double saldoInicial) {
         if (!contas.containsKey(numero)) {
-            contas.put(numero, new Conta(numero));
+            contas.put(numero, new Conta(numero, saldoInicial));
             System.out.println("Conta criada com sucesso!");
         } else {
             System.out.println("Já existe uma conta com esse número.");

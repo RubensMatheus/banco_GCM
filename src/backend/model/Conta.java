@@ -4,9 +4,9 @@ public class Conta {
     private int numeroConta;
     private double saldo;
 
-    public Conta(int numeroConta) {
+    public Conta(int numeroConta, double saldoInicial) {
         this.numeroConta = numeroConta;
-        this.saldo = 0.0;
+        this.saldo = saldoInicial;
     }
 
     public int getNumeroConta() {

@@ -28,7 +28,9 @@ public class main {
                 case 1:
                     System.out.print("Digite o número da conta: ");
                     int numeroConta = scanner.nextInt();
-                    banco.cadastrarConta(numeroConta);
+                    System.out.print("Digite o saldo inicial da conta: ");
+                    double saldoInicial = scanner.nextDouble();
+                    banco.cadastrarConta(numeroConta, saldoInicial);
                     break;
                 case 2:
                     System.out.print("Digite o número da conta: ");
