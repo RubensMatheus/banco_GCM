@@ -18,16 +18,18 @@ public class Banco {
         if (!contas.containsKey(numero)) {
             if (tipo == 1 ) {
                 contas.put(numero, new ContaBonus(numero));
-            } else if (tipo == 2) {
-                contas.put(numero, new ContaPoupanca(numero));
-            }
-            else {
+            } else {
                 contas.put(numero, new Conta(numero));
             }
             System.out.println("Conta criada com sucesso!");
         } else {
             System.out.println("Já existe uma conta com esse número.");
         }
+    }
+
+    public void cadastrarContaPoupanca(int numero, double saldoInicial) {
+        contas.put(numero, new ContaPoupanca(numero, saldoInicial));
+
     }
 
     public void consultarSaldo(int numero) {
