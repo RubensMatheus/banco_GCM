@@ -21,6 +21,6 @@ public class ContaBonus extends Conta{
 
     public void creditarTransferencia(double valor) {
         super.creditar(valor);
-        pontuacao += (int) (valor / 200.0);
+        pontuacao += (int) (valor / 150.0);
     }
 }

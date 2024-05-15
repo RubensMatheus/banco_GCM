@@ -83,7 +83,7 @@ public class Banco {
             if (contaOrigem != null && contaDestino != null) {
                 if (contaOrigem.getSaldo() >= valor) {
                     contaOrigem.debitar(valor);
-                    contaDestino.creditar(valor);
+                    if (contaDestino instanceof ContaBonus) ((ContaBonus) contaDestino).creditarTransferencia(valor);
                     System.out.println("Transferência de " + valor + " da conta " + origem + " para a conta " + destino + " realizada com sucesso.");
                 }else {
                     System.out.println("Saldo insuficiente na conta de origem.");
