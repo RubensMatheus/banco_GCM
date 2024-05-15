@@ -16,7 +16,7 @@ public class Banco {
 
     public void cadastrarConta(int numero, int tipo) {
         if (!contas.containsKey(numero)) {
-            if (tipo == 1 ) {
+            if (tipo == 1) {
                 contas.put(numero, new ContaBonus(numero));
             } else {
                 contas.put(numero, new Conta(numero));
@@ -63,11 +63,15 @@ public class Banco {
         if (valor >= 0) {
             Conta conta = contas.get(numero);
             if (conta != null) {
-                if (conta.getSaldo() >= valor) {
+                if (!(conta instanceof ContaPoupanca) && conta.getSaldo() - valor >= -1000.00) {
                     conta.debitar(valor);
                     System.out.println("Débito de " + valor + " realizado com sucesso na conta " + numero);
-                }else {
-                    System.out.println("Saldo insuficiente na conta de origem.");
+                } else if (conta instanceof ContaPoupanca && conta.getSaldo() >= valor) {
+                    conta.debitar(valor);
+                    System.out.println("Débito de " + valor + " realizado com sucesso na conta " + numero);
+                }
+                else {
+                    System.out.println("Saldo insuficiente para realizar o débito.");
                 }
             } else {
                 System.out.println("Conta não encontrada.");
@@ -83,12 +87,17 @@ public class Banco {
             Conta contaDestino = contas.get(destino);
 
             if (contaOrigem != null && contaDestino != null) {
-                if (contaOrigem.getSaldo() >= valor) {
+                if (!(contaOrigem instanceof ContaPoupanca) && contaOrigem.getSaldo() - valor >= 1000.00) {
                     contaOrigem.debitar(valor);
                     contaDestino.creditar(valor);
                     System.out.println("Transferência de " + valor + " da conta " + origem + " para a conta " + destino + " realizada com sucesso.");
-                }else {
-                    System.out.println("Saldo insuficiente na conta de origem.");
+                } else if (contaOrigem instanceof ContaPoupanca && contaOrigem.getSaldo() >= valor) {
+                    contaOrigem.debitar(valor);
+                    contaDestino.creditar(valor);
+                    System.out.println("Transferência de " + valor + " da conta " + origem + " para a conta " + destino + " realizada com sucesso.");
+                }
+                else {
+                    System.out.println("Saldo insuficiente para realizar o débito.");
                 }
             } else {
                 System.out.println("Conta de origem ou destino não encontrada.");
