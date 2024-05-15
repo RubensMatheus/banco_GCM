@@ -18,12 +18,22 @@ public class Banco {
         if (!contas.containsKey(numero)) {
             if (tipo == 1 ) {
                 contas.put(numero, new ContaBonus(numero));
+                System.out.println("Conta criada com sucesso!");
             } else if (tipo == 2) {
                 contas.put(numero, new ContaPoupanca(numero));
+                System.out.println("Conta criada com sucesso!");
             }
             else {
-                contas.put(numero, new Conta(numero));
+                System.out.println("tipo informado incorretamente");
             }
+        } else {
+            System.out.println("Já existe uma conta com esse número.");
+        }
+    }
+
+    public void cadastrarContaSimples(int numero, double saldoInicial) {
+        if (!contas.containsKey(numero)) {
+            contas.put(numero, new Conta(numero, saldoInicial));
             System.out.println("Conta criada com sucesso!");
         } else {
             System.out.println("Já existe uma conta com esse número.");

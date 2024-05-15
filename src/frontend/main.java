@@ -14,12 +14,13 @@ public class main {
         int opcao;
         do {
             System.out.println("\nMenu:");
-            System.out.println("1. Cadastrar Conta");
-            System.out.println("2. Consultar Saldo");
-            System.out.println("3. Crédito");
-            System.out.println("4. Débito");
-            System.out.println("5. Transferência");
-            System.out.println("6. Render Juros");
+            System.out.println("1. Cadastrar Conta Simples");
+            System.out.println("2. Cadastrar Conta Bonus ou poupança");
+            System.out.println("3. Consultar Saldo");
+            System.out.println("4. Crédito");
+            System.out.println("5. Débito");
+            System.out.println("6. Transferência");
+            System.out.println("7. Render Juros");
             System.out.println("0. Sair");
             System.out.print("Escolha uma opção: ");
             opcao = scanner.nextInt();
@@ -27,32 +28,39 @@ public class main {
             switch (opcao) {
 
                 case 1:
-                    System.out.println("Digite, 1 para Conta Bônus, 2 para Conta Poupança e outro número qualquer para Conta normal: ");
+                    System.out.print("Digite o número da conta: ");
+                    int numeroContaSimples = scanner.nextInt();
+                    System.out.print("Digite o saldo inicial da conta: ");
+                    double saldoInicial = scanner.nextDouble();
+                    banco.cadastrarContaSimples(numeroContaSimples, saldoInicial);
+                    break;
+                case 2:
+                    System.out.println("Digite, 1 para Conta Bônus e 2 para Conta Poupança: ");
                     int tipoConta = scanner.nextInt();
                     System.out.print("Digite o número da conta: ");
                     int numeroConta = scanner.nextInt();
                     banco.cadastrarConta(numeroConta, tipoConta);
                     break;
-                case 2:
+                case 3:
                     System.out.print("Digite o número da conta: ");
                     int numConta = scanner.nextInt();
                     banco.consultarSaldo(numConta);
                     break;
-                case 3:
+                case 4:
                     System.out.print("Digite o número da conta: ");
                     int numC = scanner.nextInt();
                     System.out.print("Digite o valor a ser creditado: ");
                     double valorCredito = scanner.nextDouble();
                     banco.creditar(numC, valorCredito);
                     break;
-                case 4:
+                case 5:
                     System.out.print("Digite o número da conta: ");
                     int numD = scanner.nextInt();
                     System.out.print("Digite o valor a ser debitado: ");
                     double valorDebito = scanner.nextDouble();
                     banco.debitar(numD, valorDebito);
                     break;
-                case 5:
+                case 6:
                     System.out.print("Digite o número da conta de origem: ");
                     int origem = scanner.nextInt();
                     System.out.print("Digite o número da conta de destino: ");
@@ -61,7 +69,7 @@ public class main {
                     double valorTransferencia = scanner.nextDouble();
                     banco.transferencia(origem, destino, valorTransferencia);
                     break;
-                case 6:
+                case 7:
                     System.out.print("Digite a taxa de juros a ser aplicada: ");
                     double taxaJuros = scanner.nextDouble();
                     banco.renderJuros(taxaJuros);
@@ -79,5 +87,4 @@ public class main {
         scanner.close();
 
     }
-
 }
