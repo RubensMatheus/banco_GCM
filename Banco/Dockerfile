@@ -9,6 +9,7 @@ COPY pom.xml .
 COPY src ./src
 
 # Executa o build da aplicação usando Maven
+#RUN mvn clean package
 RUN mvn clean package
 #-DskipTests
 
@@ -19,7 +20,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copia o jar gerado na etapa de build para o contêiner
-COPY --from=build /app/target/testeDoker-0.0.1-SNAPSHOT.jar /app/your-application.jar
+COPY --from=build /app/target/Banco-0.0.1-SNAPSHOT.jar /app/your-application.jar
 
 # Comando para rodar a aplicação
 ENTRYPOINT ["java", "-jar", "your-application.jar"]

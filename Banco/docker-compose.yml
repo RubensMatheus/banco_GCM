@@ -27,17 +27,6 @@ services:
     depends_on:
       - mysql-db
 
-  test-db:
-    image: mysql:8.0.33
-    container_name: test-db
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: testdb
-      MYSQL_USER: testuser
-      MYSQL_PASSWORD: testpassword
-    volumes:
-      - test-mysql-data:/var/lib/mysql
 
 volumes:
   mysql-data:
-  test-mysql-data:
