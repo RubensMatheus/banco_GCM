@@ -57,6 +57,12 @@ jobs:
         working-directory: Banco
         run: mvn test
 
+      - name: Configure Git
+        run: |
+          git config --global user.name "RubensMatheus"
+          git config --global user.email "rubensmatheusvenancio@gmail.com"
+          git remote set-url origin https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/${{ github.repository }}
+
       - name: Create Tag
         id: create_tag
         run: |
@@ -68,3 +74,5 @@ jobs:
           
           git tag $TAG_NAME
           git push origin $TAG_NAME
+        env:
+          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
