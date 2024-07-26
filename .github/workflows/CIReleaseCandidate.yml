@@ -3,7 +3,7 @@ name: CI Release Candidate
 on:
   push:
     tags:
-      - rc-*
+      - 'rc-*.*'
 
 jobs:
   build:
@@ -36,29 +36,38 @@ jobs:
           distribution: 'zulu'
 
       - name: Install dependencies
+        working-directory: Banco
         run: mvn dependency:go-offline
 
       - name: Build the project
+        working-directory: Banco
         run: mvn clean package
 
+      - name: Set environment variables for tests
+        run: |
+          echo "SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/testdb" >> $GITHUB_ENV
+          echo "SPRING_DATASOURCE_USERNAME=testuser" >> $GITHUB_ENV
+          echo "SPRING_DATASOURCE_PASSWORD=testpassword" >> $GITHUB_ENV
+          echo "SPRING_DATASOURCE_AUTO=create-drop" >> $GITHUB_ENV
+
       - name: Run static code analysis
+        working-directory: Banco
         run: mvn pmd:pmd
 
       - name: Run unit tests
+        working-directory: Banco
         run: mvn test
 
-      - name: Create ZIP archive
+      - name: Create package
+        working-directory: Banco
         run: |
-          ZIP_NAME=$(git describe --tags)
-          mkdir -p artifacts
-          cp -r target artifacts/
-          cd artifacts
-          zip -r "${ZIP_NAME}.zip" *
-        env:
-          ZIP_NAME: $(git describe --tags)
+          TAG_NAME=${GITHUB_REF/refs\/tags\//}
+          ZIP_NAME="${TAG_NAME}.zip"
+          zip -r $ZIP_NAME target/
+          echo "::set-output name=package::$ZIP_NAME"
 
-      - name: Upload artifact
+      - name: Upload package
         uses: actions/upload-artifact@v3
         with:
-          name: Release-Candidate
-          path: artifacts/*.zip
+          name: release-package
+          path: ${{ steps.create_package.outputs.package }}
