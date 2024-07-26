@@ -39,9 +39,11 @@ jobs:
           distribution: 'zulu'
 
       - name: Install dependencies
+        working-directory: banco_GCM/Banco
         run: mvn dependency:go-offline
 
       - name: Build the project
+        working-directory: banco_GCM/Banco
         run: mvn clean package
 
       - name: Set environment variables for tests
@@ -52,6 +54,7 @@ jobs:
           echo "SPRING_DATASOURCE_AUTO=create-drop" >> $GITHUB_ENV
 
       - name: Run unit tests
+        working-directory: banco_GCM/Banco
         run: mvn test
 
       - name: Create Tag
