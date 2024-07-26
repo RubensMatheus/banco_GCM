@@ -59,7 +59,7 @@ public class ContaServiceImpl implements ContaService {
     public Conta credito(Long id, double valor) {
         if (valor < 0) throw new ValorNegativoException();
         Conta conta = contaRepository.findById(id).orElseThrow(ContaNaoEncontradaException::new);
-        //conta.setSaldo(conta.getSaldo() + valor);
+        conta.setSaldo(conta.getSaldo() + valor);
         if (conta instanceof ContaBonus) {
             ((ContaBonus) conta).setPontuacao(((ContaBonus) conta).getPontuacao() + (int) (valor / 100));
         }
