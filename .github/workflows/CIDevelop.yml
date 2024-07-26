@@ -39,7 +39,6 @@ jobs:
           distribution: 'zulu'
 
       - name: Install dependencies
-        working-directory: banco_GCM/Banco
         run: mvn dependency:go-offline
 
       - name: Build the project
