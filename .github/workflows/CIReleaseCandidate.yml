@@ -61,13 +61,13 @@ jobs:
       - name: Create package
         working-directory: Banco
         run: |
-          TAG_NAME=${GITHUB_REF/refs\/tags\//}
+          TAG_NAME=${GITHUB_REF#refs/tags/}
           ZIP_NAME="${TAG_NAME}.zip"
           zip -r $ZIP_NAME target/
-          echo "::set-output name=package::$ZIP_NAME"
+          echo "package=$ZIP_NAME" >> $GITHUB_ENV
 
       - name: Upload package
         uses: actions/upload-artifact@v3
         with:
           name: release-package
-          path: ${{ steps.create_package.outputs.package }}
+          path: ${{ env.package }}
