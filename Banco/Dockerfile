@@ -20,5 +20,7 @@ WORKDIR /app
 # Copia o jar gerado na etapa de build para o contêiner
 COPY --from=build /app/target/Banco-0.0.1-SNAPSHOT.jar /app/your-application.jar
 
+EXPOSE 8080
+
 # Comando para rodar a aplicação
 ENTRYPOINT ["java", "-jar", "your-application.jar"]
