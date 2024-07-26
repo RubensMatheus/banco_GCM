@@ -8,7 +8,4 @@ import jakarta.persistence.Entity;
 public class ContaSimples extends Conta {
     public ContaSimples() { }
 
-    public ContaSimples(String numero, double saldo) {
-        super(numero, saldo);
-    }
 }

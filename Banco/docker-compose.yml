@@ -27,6 +27,5 @@ services:
     depends_on:
       - mysql-db
 
-
 volumes:
   mysql-data:

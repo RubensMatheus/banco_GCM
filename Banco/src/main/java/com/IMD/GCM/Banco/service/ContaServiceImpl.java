@@ -83,10 +83,11 @@ public class ContaServiceImpl implements ContaService {
         Conta contaOrigem = contaRepository.findById(fromId).orElseThrow(ContaNaoEncontradaException::new);
         Conta contaDestino = contaRepository.findById(toId).orElseThrow(ContaNaoEncontradaException::new);
         debito(fromId, valor);
-        credito(toId, valor);
+        contaDestino.setSaldo(contaDestino.getSaldo() + valor);
         if (contaDestino instanceof ContaBonus) {
             ((ContaBonus) contaDestino).setPontuacao(((ContaBonus) contaDestino).getPontuacao() + (int) (valor / 150));
         }
+        contaRepository.save(contaDestino);
     }
 
     @Override

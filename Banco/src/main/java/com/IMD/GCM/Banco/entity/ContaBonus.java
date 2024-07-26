@@ -10,10 +10,6 @@ public class ContaBonus extends Conta{
 
     public ContaBonus() { }
 
-    public ContaBonus(String numero, Double saldo) {
-        super(numero, saldo);
-    }
-
     public int getPontuacao() {
         return pontuacao;
     }
