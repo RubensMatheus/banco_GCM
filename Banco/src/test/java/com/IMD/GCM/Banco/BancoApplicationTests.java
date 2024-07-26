@@ -47,7 +47,7 @@ class BancoApplicationTests {
 
 		Conta result = contaService.cadastrarConta("123", 100.0, "SIMPLES");
 		assertNotNull(result);
-        assertInstanceOf(ContaSimples.class, result);
+		assertInstanceOf(ContaSimples.class, result);
 		assertEquals("123", result.getNumero());
 		assertEquals(100, result.getSaldo());
 	}
@@ -62,7 +62,7 @@ class BancoApplicationTests {
 
 		Conta result = contaService.cadastrarConta("123", 0.0, "BONUS");
 		assertNotNull(result);
-        assertInstanceOf(ContaBonus.class, result);
+		assertInstanceOf(ContaBonus.class, result);
 		assertEquals("123", result.getNumero());
 		assertEquals(0.0, result.getSaldo());
 	}
@@ -77,7 +77,7 @@ class BancoApplicationTests {
 
 		Conta result = contaService.cadastrarConta("123", 100.0, "POUPANCA");
 		assertNotNull(result);
-        assertInstanceOf(ContaPoupanca.class, result);
+		assertInstanceOf(ContaPoupanca.class, result);
 		assertEquals("123", result.getNumero());
 		assertEquals(100.0, result.getSaldo());
 	}
@@ -92,7 +92,7 @@ class BancoApplicationTests {
 
 		Conta result = contaService.consultarConta("123");
 		assertNotNull(result);
-        assertInstanceOf(ContaSimples.class, result);
+		assertInstanceOf(ContaSimples.class, result);
 		assertEquals("123", result.getNumero());
 	}
 
@@ -164,7 +164,7 @@ class BancoApplicationTests {
 		assertThrows(ValorNegativoException.class, () -> contaService.debito(1L, -50.0));
 	}
 
-	/*@Test
+	@Test
 	public void testDebitoSaldoInsuficiente() {
 		Conta conta = new ContaSimples();
 		conta.setSaldo(100.0);
@@ -172,16 +172,6 @@ class BancoApplicationTests {
 		when(contaRepository.findById(1L)).thenReturn(Optional.of(conta));
 
 		assertThrows(SaldoInsuficienteException.class, () -> contaService.debito(1L, 2000.0));
-	}*/
-
-	@Test
-	public void testDebitoSaldoInsuficiente() {
-		Conta conta = new ContaBonus();
-		conta.setSaldo(-1000.0);
-
-		when(contaRepository.findById(1L)).thenReturn(Optional.of(conta));
-
-		assertThrows(SaldoInsuficienteException.class, () -> contaService.debito(1L, 1000.0));
 	}
 
 	// Testes para transferência
@@ -189,19 +179,6 @@ class BancoApplicationTests {
 	public void testTransferenciaValorNegativo() {
 		assertThrows(ValorNegativoException.class, () -> contaService.transferencia(1L, 2L, -50.0));
 	}
-
-	/*@Test
-	public void testTransferenciaSaldoInsuficiente() {
-		Conta contaOrigem = new ContaSimples();
-		contaOrigem.setSaldo(100.0);
-		Conta contaDestino = new ContaSimples();
-		contaDestino.setSaldo(50.0);
-
-		when(contaRepository.findById(1L)).thenReturn(Optional.of(contaOrigem));
-		when(contaRepository.findById(2L)).thenReturn(Optional.of(contaDestino));
-
-		assertThrows(SaldoInsuficienteException.class, () -> contaService.transferencia(1L, 2L, 2000.0));
-	}*/
 
 	@Test
 	public void testTransferenciaSaldoInsuficiente() {

@@ -71,7 +71,7 @@ public class ContaServiceImpl implements ContaService {
     public Conta debito(Long id, double valor) {
         if (valor < 0) throw new ValorNegativoException();
         Conta conta = contaRepository.findById(id).orElseThrow(ContaNaoEncontradaException::new);
-        if (conta.getSaldo() - valor < -2000) throw new SaldoInsuficienteException();
+        if (conta.getSaldo() - valor < -1000) throw new SaldoInsuficienteException();
         conta.setSaldo(conta.getSaldo() - valor);
         return contaRepository.save(conta);
     }
