@@ -21,7 +21,5 @@ public class Conta {
         saldo += valor;
     }
 
-    public void debitar(double valor) {
-        saldo -= valor;
-    }
+    public void debitar(double valor) { saldo -= valor; }
 }

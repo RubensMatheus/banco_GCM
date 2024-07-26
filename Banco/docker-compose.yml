@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  mysql-db:
+    image: mysql:8.0.33
+    container_name: mysql-db
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: bdDocker
+      MYSQL_USER: rubens
+      MYSQL_PASSWORD: 123456
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  app:
+    build: .
+    container_name: spring-boot-app
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/bdDocker
+      SPRING_DATASOURCE_USERNAME: rubens
+      SPRING_DATASOURCE_PASSWORD: 123456
+      SPRING_DATASOURCE_AUTO: update
+    depends_on:
+      - mysql-db
+
+volumes:
+  mysql-data:
