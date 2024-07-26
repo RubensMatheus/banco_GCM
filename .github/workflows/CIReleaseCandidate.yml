@@ -66,8 +66,11 @@ jobs:
           zip -r $ZIP_NAME target/
           echo "package=$ZIP_NAME" >> $GITHUB_ENV
 
+      - name: List files
+        run: ls -al Banco
+
       - name: Upload package
         uses: actions/upload-artifact@v3
         with:
           name: release-package
-          path: ${{ env.package }}
+          path: Banco/${{ env.package }}
