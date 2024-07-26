@@ -69,8 +69,8 @@
 					<targetJdk>17</targetJdk>
 					<format>xml</format>
 					<printFailingErrors>true</printFailingErrors>
-					<outputDirectory>reports/pmd</outputDirectory>
-					<targetDirectory>reports/pmd</targetDirectory>
+					<outputDirectory>target/reports/pmd</outputDirectory>
+					<targetDirectory>target/reports/pmd</targetDirectory>
 				</configuration>
 				<executions>
 					<execution>
