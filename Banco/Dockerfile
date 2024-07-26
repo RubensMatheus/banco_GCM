@@ -9,9 +9,7 @@ COPY pom.xml .
 COPY src ./src
 
 # Executa o build da aplicação usando Maven
-#RUN mvn clean package
 RUN mvn clean package
-#-DskipTests
 
 # Etapa 2: Imagem final
 FROM openjdk:17-jdk-slim
