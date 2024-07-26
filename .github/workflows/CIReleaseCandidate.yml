@@ -1,0 +1,64 @@
+name: CI Release Candidate
+
+on:
+  push:
+    tags:
+      - rc-*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0.33
+        env:
+          MYSQL_ROOT_PASSWORD: rootpassword
+          MYSQL_DATABASE: testdb
+          MYSQL_USER: testuser
+          MYSQL_PASSWORD: testpassword
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+
+      - name: Install dependencies
+        run: mvn dependency:go-offline
+
+      - name: Build the project
+        run: mvn clean package
+
+      - name: Run static code analysis
+        run: mvn pmd:pmd
+
+      - name: Run unit tests
+        run: mvn test
+
+      - name: Create ZIP archive
+        run: |
+          ZIP_NAME=$(git describe --tags)
+          mkdir -p artifacts
+          cp -r target artifacts/
+          cd artifacts
+          zip -r "${ZIP_NAME}.zip" *
+        env:
+          ZIP_NAME: $(git describe --tags)
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Release-Candidate
+          path: artifacts/*.zip
