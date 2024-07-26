@@ -1,0 +1,76 @@
+name: CI Release Candidate
+
+on:
+  push:
+    tags:
+      - 'rc-*.*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0.33
+        env:
+          MYSQL_ROOT_PASSWORD: rootpassword
+          MYSQL_DATABASE: testdb
+          MYSQL_USER: testuser
+          MYSQL_PASSWORD: testpassword
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+
+      - name: Install dependencies
+        working-directory: Banco
+        run: mvn dependency:go-offline
+
+      - name: Build the project
+        working-directory: Banco
+        run: mvn clean package
+
+      - name: Set environment variables for tests
+        run: |
+          echo "SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/testdb" >> $GITHUB_ENV
+          echo "SPRING_DATASOURCE_USERNAME=testuser" >> $GITHUB_ENV
+          echo "SPRING_DATASOURCE_PASSWORD=testpassword" >> $GITHUB_ENV
+          echo "SPRING_DATASOURCE_AUTO=create-drop" >> $GITHUB_ENV
+
+      - name: Run static code analysis
+        working-directory: Banco
+        run: mvn pmd:pmd
+
+      - name: Run unit tests
+        working-directory: Banco
+        run: mvn test
+
+      - name: Create package
+        working-directory: Banco
+        run: |
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          ZIP_NAME="${TAG_NAME}.zip"
+          zip -r $ZIP_NAME target/
+          echo "package=$ZIP_NAME" >> $GITHUB_ENV
+
+      - name: List files
+        run: ls -al Banco
+
+      - name: Upload package
+        uses: actions/upload-artifact@v3
+        with:
+          name: release-package
+          path: Banco/${{ env.package }}

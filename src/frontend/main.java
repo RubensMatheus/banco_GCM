@@ -14,8 +14,8 @@ public class main {
         int opcao;
         do {
             System.out.println("\nMenu:");
-            System.out.println("1. Cadastrar Conta Simples");
-            System.out.println("2. Cadastrar Conta Bonus ou poupança");
+            System.out.println("1. Cadastrar Conta");
+            System.out.println("2. Cadastrar Conta Poupança");
             System.out.println("3. Consultar Saldo");
             System.out.println("4. Crédito");
             System.out.println("5. Débito");
@@ -40,6 +40,13 @@ public class main {
                     System.out.print("Digite o número da conta: ");
                     int numeroConta = scanner.nextInt();
                     banco.cadastrarConta(numeroConta, tipoConta);
+                    break;
+                case 2:
+                    System.out.print("Digite o número da conta: ");
+                    int numeroContaPoupanca = scanner.nextInt();
+                    System.out.print("Digite o saldo inicial: ");
+                    double saldoInicial = scanner.nextDouble();
+                    banco.cadastrarContaPoupanca(numeroContaPoupanca, saldoInicial);
                     break;
                 case 3:
                     System.out.print("Digite o número da conta: ");

@@ -1,0 +1,111 @@
+name: CI Production Release
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0.33
+        env:
+          MYSQL_ROOT_PASSWORD: rootpassword
+          MYSQL_DATABASE: bdDocker
+          MYSQL_USER: rubens
+          MYSQL_PASSWORD: 123456
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+
+      - name: Install dependencies
+        working-directory: Banco
+        run: mvn dependency:go-offline
+
+      - name: Build the project
+        working-directory: Banco
+        run: mvn clean package
+
+      - name: Set environment variables for tests
+        run: |
+          echo "SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/bdDocker" >> $GITHUB_ENV
+          echo "SPRING_DATASOURCE_USERNAME=rubens" >> $GITHUB_ENV
+          echo "SPRING_DATASOURCE_PASSWORD=123456" >> $GITHUB_ENV
+          echo "SPRING_DATASOURCE_AUTO=create-drop" >> $GITHUB_ENV
+
+      - name: Run static code analysis
+        working-directory: Banco
+        run: mvn pmd:pmd
+
+      - name: Run unit tests
+        working-directory: Banco
+        run: mvn test
+
+      - name: Create package
+        working-directory: Banco
+        run: |
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          ZIP_NAME="${TAG_NAME}.zip"
+          zip -r $ZIP_NAME target/
+          echo "package=$ZIP_NAME" >> $GITHUB_ENV
+
+      - name: Upload package
+        uses: actions/upload-artifact@v3
+        with:
+          name: release-package
+          path: Banco/${{ env.package }}
+
+      - name: Docker Login
+        uses: docker/login-action@v3.3.0
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD}}
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v3.2.0
+        with:
+          context: Banco
+          push: true
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/myapp:latest
+            ${{ secrets.DOCKER_USERNAME }}/myapp:${{github.run_number}}
+
+      - name: Create tag
+        id: create_tag
+        run: |
+          # Fetch all tags from the remote
+          git fetch --tags
+
+          # Get the latest 'rc-' tag
+          LATEST_RC_TAG=$(git tag -l 'rc-*' | sort -V | tail -n 1)
+
+          if [ -z "$LATEST_RC_TAG" ]; then
+            echo "No 'rc-' tags found. Cannot create 'rel-' tag."
+            exit 1
+          fi
+
+          # Extract version number from the tag (e.g., 'rc-3.4' -> '3.4')
+          VERSION=${LATEST_RC_TAG#rc-}
+
+          # Create the new 'rel-' tag
+          TAG_NAME="rel-${VERSION}"
+          echo "Creating tag: $TAG_NAME"
+          git tag $TAG_NAME
+          git push origin $TAG_NAME
